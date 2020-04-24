@@ -46,7 +46,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def validate_following(self, attrs):
         user = self.context['request'].user
-        if Follow.objects.filter(user=user, following__username=attrs).count() != 0:
+        if Follow.objects.filter(user=user, following__username=attrs).exists():
             raise serializers.ValidationError('You have already follow this author!')
         return attrs
 
