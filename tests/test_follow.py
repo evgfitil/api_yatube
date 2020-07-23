@@ -8,40 +8,38 @@ class TestFollowAPI:
     def test_follow_not_found(self, client, follow_1, follow_2):
         response = client.get('/api/v1/follow/')
 
-        assert response.status_code != 404, 'Страница `/api/v1/follow/` не найдена, проверьте этот адрес в *urls.py*'
+        assert response.status_code != 404, 'The page `/api/v1/follow/` is not found, check it in *urls.py*'
 
     @pytest.mark.django_db(transaction=True)
     def test_follow_not_auth(self, client, follow_1, follow_2):
         response = client.get('/api/v1/follow/')
         assert response.status_code == 200,\
-            'Проверьте, что `/api/v1/follow/` при запросе без токена возвращаете статус 200'
+            'Check that the request `/api/v1/follow/` without token returns 200'
 
     @pytest.mark.django_db(transaction=True)
     def test_follow_get(self, user_client, follow_1, follow_2, follow_3):
         response = user_client.get('/api/v1/follow/')
         assert response.status_code == 200, \
-            'Проверьте, что при GET запросе `/api/v1/follow/` с токеном авторизации возвращаетсся статус 200'
+            'Check that the GET request `/api/v1/follow/` with token returns 200'
 
         test_data = response.json()
 
-        assert type(test_data) == list, 'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается список'
+        assert type(test_data) == list, 'Check that the GET request `/api/v1/follow/` returns a list'
 
         assert len(test_data) == Follow.objects.count(), \
-            'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается весь список подписок'
+            'Check that the GET request `/api/v1/follow/` returns a followers list'
 
         follow = Follow.objects.all()[0]
         test_group = test_data[0]
         assert 'user' in test_group, \
-            'Проверьте, что добавили `user` в список полей `fields` сериализатора модели Follow'
+            'Check that the `fields` of the Follow serializer have an `user` title'
         assert 'following' in test_group, \
-            'Проверьте, что добавили `following` в список полей `fields` сериализатора модели Follow'
+            'Check that the `fields` of the Comment serializer have an `following` title'
 
         assert test_group['user'] == follow.user.username, \
-            'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается весь список подписок, ' \
-            'в поле `user` должен быть `username`'
+            'Check that the GET request `/api/v1/follow/` returns a following list '
         assert test_group['following'] == follow.following.username, \
-            'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается весь список подписок, ' \
-            'в поле `following` должен быть `username`'
+            'Check that the GET request `/api/v1/follow/` returns a following list '
 
     @pytest.mark.django_db(transaction=True)
     def test_follow_create(self, user_client, follow_2, follow_3, user, user_2, another_user):
@@ -50,27 +48,27 @@ class TestFollowAPI:
         data = {}
         response = user_client.post('/api/v1/follow/', data=data)
         assert response.status_code == 400, \
-            'Проверьте, что при POST запросе на `/api/v1/follow/` с не правильными данными возвращается статус 400'
+            'Check that the POST request `/api/v1/follow/` with a wrong data returns 400'
 
         data = {'following': another_user.username}
         response = user_client.post('/api/v1/follow/', data=data)
         assert response.status_code == 201, \
-            'Проверьте, что при POST запросе на `/api/v1/follow/` с правильными данными возвращается статус 201'
+            'Check that the POST request `/api/v1/follow/` returns 201'
 
         test_data = response.json()
 
-        msg_error = 'Проверьте, что при POST запросе на `/api/v1/follow/` возвращается словарь с данными новой подписки'
+        msg_error = 'Check that the POST request `/api/v1/follow/` returns a dict with the following data'
         assert type(test_data) == dict, msg_error
         assert test_data.get('user') == user.username, msg_error
         assert test_data.get('following') == data['following'], msg_error
 
         assert follow_count + 1 == Follow.objects.count(), \
-            'Проверьте, что при POST запросе на `/api/v1/group/` создается группа'
+            'Check that the POST request `/api/v1/group/` creates a group'
 
         response = user_client.post('/api/v1/follow/', data=data)
         assert response.status_code == 400, \
-            'Проверьте, что при POST запросе на `/api/v1/follow/` ' \
-            'на уже подписанного автора должен возвращаться статус 400'
+            'Check that the POST request `/api/v1/follow/` ' \
+            'with the resubscription returns 400'
 
     @pytest.mark.django_db(transaction=True)
     def test_follow_search_filter(self, user_client, follow_1, follow_2, follow_3, follow_4,
@@ -79,17 +77,17 @@ class TestFollowAPI:
 
         response = user_client.get('/api/v1/follow/')
         assert response.status_code == 200, \
-            'Страница `/api/v1/follow/` не найдена, проверьте этот адрес в *urls.py*'
+            'The page `/api/v1/follow/` is not found, check it in *urls.py*'
         test_data = response.json()
         assert len(test_data) == 4, \
-            'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается список всех подписок'
+            'Check that the GET request `/api/v1/follow/` returns the following list'
 
         response = user_client.get(f'/api/v1/follow/?search={user.username}')
         assert len(response.json()) == 2, \
-            'Проверьте, что при GET запросе с параметром `search` на `/api/v1/follow/` ' \
-            'возвращается список соответствующих подписок'
+            'Check that the GET request with a `search` query at `/api/v1/follow/` ' \
+            'returns the correct following list'
 
         response = user_client.get(f'/api/v1/follow/?search={user_2.username}')
         assert len(response.json()) == 3, \
-            'Проверьте, что при GET запросе с параметром `search` на `/api/v1/follow/` ' \
-            'возвращается список соответствующих подписок'
+            'Check that the GET request with a `search` query at `/api/v1/follow/` ' \
+            'returns the correct following list'
