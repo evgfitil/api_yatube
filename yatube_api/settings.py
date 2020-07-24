@@ -1,13 +1,15 @@
 import os
 
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'hhz7l-ltdismtf@bzyz+rple7*s*w$jak%whj@(@u0eok^f9k4'
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,8 +55,12 @@ WSGI_APPLICATION = 'yatube_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
+    'NAME': os.getenv('SQL_DATABASE', os.path.join(BASE_DIR, 'db.sqlite3')),
+    'USER': os.getenv('SQL_USER', 'user'),
+    'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
+    'HOST': os.getenv('SQL_HOST', 'localhost'),
+    'PORT': os.getenv('SQL_PORT', '5432')
     }
 }
 
