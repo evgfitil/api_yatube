@@ -1,7 +1,9 @@
-requests
 django
-pytest
-pytest-django
 djangorestframework
 djangorestframework-simplejwt
 django-filter
+pytest
+pytest-django
+python-dotenv
+psycopg2-binary
+requests
