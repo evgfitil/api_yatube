@@ -3,6 +3,7 @@ version: '3'
 services:
   web:
     build: .
+    container_name: yt-api-web
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/app
@@ -14,6 +15,7 @@ services:
       - db
   
   db:
+    container_name: yt-api-db
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
