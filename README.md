@@ -13,11 +13,11 @@ Demo site https://yatube.ea4ws.tk/api/v1/ available with authentication methods 
   
   2. Copy or rename `.env-docker-example` file to `.env`. Customize it for your needs
   
-  4. Use provided `Dockerfile` and `docker-compose.yml`, build the image and run the container
+  3. Use provided `Dockerfile` and `docker-compose.yml`, build the image and run the container
   ```
   docker-compose up -d --build
   ```
-  5.Create Django admin user
+  4. Create Django admin user
   
   ```
   docker exec -ti <container_id> python manage.py createsuperuser
@@ -47,12 +47,12 @@ source ./venv/bin/activate
   ```
 pip install -r requirements.txt
 ```
-  6. Create a Django admin user and apply migrations
+  5. Create a Django admin user and apply migrations
  ```
  python manage.py migrate
  python manage.py createsuperuser
  ```
-  7. Start API server locally
+  6. Start API server locally
 ```
 python manage.py runserver
 ```
