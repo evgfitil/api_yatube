@@ -3,7 +3,7 @@
 
 All available endpoints and API specifications are here https://yatube.ea4ws.tk/redoc/
 
-Demo site https://yatube.ea4ws.tk include API available with authentication methods and anonymous access. Use endpoints https://yamdb.ea4ws.tk/api/v1/
+Demo site https://yatube.ea4ws.tk/api/v1/ available with authentication methods and anonymous access
 
 ### Developing and testing locally (Quick Start)
 
