@@ -1,9 +1,9 @@
 # api_yatube
 ***Yatube API*** is a REST API for [Yatube](https://github.com/evgfitil/yatube) blog platform
 
-All available endpoints and API specifications are here https://yatube.ea4ws.tk/redoc/
+All available endpoints and API specifications are here https://yatube.evgfitil.ml/redoc/
 
-Demo site https://yatube.ea4ws.tk/api/v1/ available with authentication methods and anonymous access
+Demo site https://yatube.evgfitil.ml/api/v1/ available with authentication methods and anonymous access
 
 ### Developing and testing locally (Quick Start)
 
